@@ -1,9 +1,24 @@
 #import necessary libraries
 from fastapi import FastAPI,Path,HTTPException,Query
+from pydantic import BaseModel,Field,AnyUrl,EmailStr
+from typing import Optional,List,Dict,AnyStr,Annotated
 import json
 
 # Create FastAPI instance
 app = FastAPI()
+
+#Pydantic Model for Patient data validation
+class Patient(BaseModel):
+    id: Annotated[str,Field(...,description="Unique identifier for the patient",examples="P001")]
+    name: Annotated[str,Field(...,description="full name of the patient",examples="Rakibul islam")]
+    age: Annotated[int,Field(...,description="Age of the patient in yeart",examples=30,gt=0,lt=100)]
+    email: Annotated[EmailStr,Field(default=None,description="Email address fo the patient",examples="rakibul@gmail.com")]
+    gender: Annotated[str,Field(...,description="Gender of the patient",examples=['Male','Female','Other'])]
+    city: Annotated[str,Field(...,description="City where the patient lives",examples="Dhaka")]
+    disease: Annotated[str,Field(...,description="Disease diagnosed for the patient",examples="Diabetes")]
+    height: Annotated[float,Field(...,description="Height of the patient in foot",examples=5.8,gt=3,lt=8)]
+    weight : Annotated[float,Field(...,description="Weight of the patient in Kg",examples=70.5,gt=10,lt=130)]
+
 
 # Load patient data from JSon file
 def LoadData():
