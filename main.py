@@ -10,15 +10,15 @@ app = FastAPI()
 
 #Pydantic Model for Patient data validation
 class Patient(BaseModel):
-    id: Annotated[str,Field(...,description="Unique identifier for the patient",examples="P001")]
-    name: Annotated[str,Field(...,description="full name of the patient",examples="Rakibul islam")]
-    age: Annotated[int,Field(...,description="Age of the patient in yeart",examples=30,gt=0,lt=100)]
-    email: Annotated[EmailStr,Field(default=None,description="Email address fo the patient",examples="rakibul@gmail.com")]
+    id: Annotated[str,Field(...,description="Unique identifier for the patient",example="P001")]
+    name: Annotated[str,Field(...,description="full name of the patient",example="Rakibul islam")]
+    age: Annotated[int,Field(...,description="Age of the patient in yeart",example=30,gt=0,lt=100)]
+    email: Annotated[EmailStr,Field(default=None,description="Email address fo the patient",example="rakibul@gmail.com")]
     gender: Annotated[str,Field(...,description="Gender of the patient",examples=['Male','Female','Other'])]
-    city: Annotated[str,Field(...,description="City where the patient lives",examples="Dhaka")]
-    disease: Annotated[str,Field(...,description="Disease diagnosed for the patient",examples="Diabetes")]
-    height: Annotated[float,Field(...,description="Height of the patient in foot",examples=5.8,gt=3,lt=8)]
-    weight : Annotated[float,Field(...,description="Weight of the patient in Kg",examples=70.5,gt=10,lt=130)]
+    city: Annotated[str,Field(...,description="City where the patient lives",example="Dhaka")]
+    disease: Annotated[str,Field(...,description="Disease diagnosed for the patient",example="Diabetes")]
+    height: Annotated[float,Field(...,description="Height of the patient in foot",example=5.8,gt=3,lt=8)]
+    weight : Annotated[float,Field(...,description="Weight of the patient in Kg",example=70.5,gt=10,lt=130)]
 
     @computed_field
     @property
@@ -103,7 +103,7 @@ def add_patient(patient:Patient):
     if patient.id  in data:
         raise HTTPException(status_code=400,detail="patient with this ID already exists")
     #Add new patient
-    data[patient.id]=Patient.model_dump(exclude={'id'})
+    data[patient.id]=patient.model_dump(exclude={'id'})
     #Save Data
     SaveData(data)
     return JSONResponse(status_code=201,content={"message": "Patient added successfully"})
